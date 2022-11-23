@@ -24,9 +24,21 @@
         </div>
 
         <div class="Controls">
-          <button class="Btn">Plan To Watch</button>
+          <button
+            class="Btn"
+            @click="addMovieToWatchlist(movie)"
+            :disabled="checkWatchlistMovies(movie.id)"
+          >
+            Plan To Watch
+          </button>
 
-          <button class="Btn">Watched</button>
+          <button
+            class="Btn"
+            @click="addMovieToWatched(movie)"
+            :disabled="checkWatchedMovies(movie.id)"
+          >
+            Watched
+          </button>
           <button class="Btn">
             <i class="fas fa-info" />
           </button>
@@ -37,9 +49,29 @@
 </template>
 
 <script>
+import { mapActions } from "vuex";
+
 export default {
   name: "ResultCard",
   props: { movie: Object },
+
+  methods: {
+    ...mapActions([
+      "addMovieToWatchlist",
+      "addMovieToWatched",
+      "findWatchedMovie",
+    ]),
+    checkWatchlistMovies(id) {
+      return this.$store.state.watchlist.find((item) => item.id === id)
+        ? true
+        : this.$store.state.watched.find((item) => item.id === id)
+        ? true
+        : false;
+    },
+    checkWatchedMovies(id) {
+      return this.$store.state.watched.find((item) => item.id === id);
+    },
+  },
 };
 </script>
 
