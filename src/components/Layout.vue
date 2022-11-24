@@ -15,7 +15,7 @@
           <router-link class="PageLink" to="/profile">MyList</router-link>
         </li>
         <li class="NavLinkItem">
-          <button class="LogoutButton">Logout</button>
+          <button class="LogoutButton" @click="logout">Logout</button>
         </li>
       </ul>
       <div class="MenuIconWrapper">
@@ -26,8 +26,25 @@
 </template>
 
 <script>
+import { signOut } from "@firebase/auth";
+import { auth } from "../firebase/firebaseConfig";
+
 export default {
   name: "Layout",
+  methods: {
+    logout() {
+      if (auth.currentUser) {
+        signOut(auth)
+          .then(() => {
+            alert("Successfully logged out!");
+            this.$router.push("/auth");
+          })
+          .catch((error) => {
+            alert(error.message);
+          });
+      }
+    },
+  },
 };
 </script>
 
