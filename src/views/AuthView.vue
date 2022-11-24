@@ -2,8 +2,7 @@
   <div class="PageBreak" />
   <section class="AuthFormContainer">
     <h1 class="FormTitle">{{ isLogin ? "Login" : "Sign Up" }}</h1>
-    <form @submit.prevent="register">
-      <!-- <form @submit.prevent="isLogin ? login : register"> -->
+    <form @submit.prevent="onSubmit">
       <div class="FormContent">
         <label class="FormContent label" htmlFor="email">Your Email</label>
         <input
@@ -59,74 +58,30 @@ export default {
       isLogin: true,
     };
   },
-
   methods: {
-    register() {
-      createUserWithEmailAndPassword(auth, this.email, this.password)
-        .then(() => {
-          alert("Successfully registered!");
-          this.$router.push("/profile");
-        })
-        .catch((error) => {
-          alert(error.message);
-        });
-    },
-    login() {
-      signInWithEmailAndPassword(auth, this.email, this.password)
-        .then(() => {
-          alert("Successfully logged in!");
-          this.$router.push("/profile");
-        })
-        .catch((error) => {
-          alert(error.message);
-        });
+    onSubmit() {
+      if (this.isLogin) {
+        signInWithEmailAndPassword(auth, this.email, this.password)
+          .then(() => {
+            alert("Successfully logged in!");
+            this.$router.push("/profile");
+          })
+          .catch((error) => {
+            alert(error.message);
+          });
+      } else {
+        createUserWithEmailAndPassword(auth, this.email, this.password)
+          .then(() => {
+            alert("Successfully registered!");
+            this.$router.push("/profile");
+          })
+          .catch((error) => {
+            alert(error.message);
+          });
+      }
     },
   },
 };
-
-// const history = useHistory();
-//   const emailInputRef = useRef();
-//   const passwordInputRef = useRef();
-
-//   const [isLogin, setIsLogin] = useState(true);
-//   const [isLoading, setIsLoading] = useState(false);
-
-//   const switchAuthModeHandler = () => {
-//     setIsLogin((prevState) => !prevState);
-//   };
-
-//   const submitHandler = useCallback(
-//     async (event) => {
-//       event.preventDefault();
-
-//       const enteredEmail = emailInputRef.current.value;
-//       const enteredPassword = passwordInputRef.current.value;
-
-//       setIsLoading(true);
-//       const auth = getAuth();
-
-//       try {
-//         if (isLogin) {
-//           await signInWithEmailAndPassword(auth, enteredEmail, enteredPassword);
-//           history.replace("/profile");
-//         } else {
-//           await createUserWithEmailAndPassword(
-//             auth,
-//             enteredEmail,
-//             enteredPassword
-//           );
-//           history.replace("/");
-//         }
-//       } catch (error) {
-//         alert(error.message);
-//         setIsLoading(false);
-//       }
-//       return () => {
-//         setIsLoading(false);
-//       };
-//     },
-//     [history, isLogin]
-//   );
 </script>
 
 <style scoped>
