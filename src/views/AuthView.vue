@@ -29,7 +29,7 @@
         <button class="FormButton" type="submit">
           {{ isLogin ? "Login" : "Create Account" }}
         </button>
-        <!-- )} {isLoading && <LoadingSpinner />} -->
+        <div v-show="isLoading" class="Spinner" />
         <button
           class="FormButtonToggle"
           type="button"
@@ -56,11 +56,13 @@ export default {
       email: "",
       password: "",
       isLogin: true,
+      isLoading: false,
     };
   },
   methods: {
     onSubmit() {
       if (this.isLogin) {
+        this.isLoading = true;
         signInWithEmailAndPassword(auth, this.email, this.password)
           .then(() => {
             alert("Successfully logged in!");
@@ -70,6 +72,7 @@ export default {
             alert(error.message);
           });
       } else {
+        this.isLoading = true;
         createUserWithEmailAndPassword(auth, this.email, this.password)
           .then(() => {
             alert("Successfully registered!");
@@ -79,6 +82,7 @@ export default {
             alert(error.message);
           });
       }
+      this.Loading = false;
     },
   },
 };
@@ -153,5 +157,30 @@ export default {
 .FormButtonToggle:hover {
   background-color: transparent;
   color: #ae82cc;
+}
+
+.Spinner {
+  display: inline-block;
+  width: 80px;
+  height: 80px;
+}
+@keyframes spinner {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+.Spinner:after {
+  content: " ";
+  display: block;
+  width: 64px;
+  height: 64px;
+  margin: 8px;
+  border-radius: 50%;
+  border: 6px solid teal;
+  border-color: teal transparent teal transparent;
+  animation: spinner 1.2s linear infinite;
 }
 </style>
